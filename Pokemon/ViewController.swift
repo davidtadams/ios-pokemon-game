@@ -7,11 +7,14 @@ class ViewController: UIViewController {
     var pokemonList = [String]()
     var score = 0
     var correctAnswer = 0
+    var progress: Float = 0.5
 
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button3: UIButton!
-
+    @IBOutlet weak var scoreProgress: UIProgressView!
+    @IBOutlet weak var scoreOut: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,17 +50,18 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonTapped(sender: UIButton) {
-        var title: String
         if sender.tag == correctAnswer {
             title = "That's correct!"
             ++score
+            progress += 0.05
         } else {
             title = "Nope. Sorry."
             --score
+            progress -= 0.05
         }
-        let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .Alert)
-        ac.addAction(UIAlertAction(title: "Continue", style: .Default, handler: askQuestion))
-        presentViewController(ac, animated: true, completion: nil)
+        scoreProgress.setProgress(progress, animated: true)
+        scoreOut.text = "Score: \(score)"
+        askQuestion()
     }
 
     override func didReceiveMemoryWarning() {
